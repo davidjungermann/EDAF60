@@ -1,0 +1,106 @@
+package model;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Optional;
+
+import expr.Environment;
+import util.XLException;
+
+@SuppressWarnings("deprecation")
+public class Sheet extends Observable implements Environment {
+
+  private Map<String, Slot> slotMap;
+  private Status status;
+
+  public Sheet() {
+    slotMap = new HashMap<String, Slot>();
+    this.status = new Status();
+  }
+
+  public Optional<Slot> getSlot(String address) {
+    Slot slot = slotMap.get(address);
+    return Optional.ofNullable(slot);
+  }
+
+  public Map<String, Slot> getSlots() {
+    return slotMap;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
+  /* Add error check? */
+  public void add(String address, String value) {
+    if (buildableExpr(value)) {
+      Slot slot = SlotFactory.slot(value);
+      if (!recursiveSlot(address, slot)) {
+        slotMap.put(address, slot);
+        status.clearStatus();
+      }
+    }
+    setChanged();
+    notifyObservers();
+  }
+
+  public void load(Map<String, String> map) {
+    for (Map.Entry<String, String> mapEntry : map.entrySet()) {
+      this.add(mapEntry.getKey(), mapEntry.getValue());
+      status.clearStatus();
+    }
+    setChanged();
+    notifyObservers();
+  }
+
+  public void clearSlot(String address) {
+    slotMap.remove(address);
+    status.clearStatus();
+    setChanged();
+    notifyObservers();
+  }
+
+  public void clearAll() {
+    slotMap.clear();
+    status.clearStatus();
+    setChanged();
+    notifyObservers();
+  }
+
+  public double value(String address) {
+    if (slotMap.containsKey(address)) {
+      return getSlot(address).map(x -> x.slotValue(this)).orElse(0.0);
+    }
+    throw XLException.emptySlotError();
+  }
+
+  /* Error handling */
+  private boolean recursiveSlot(String address, Slot slot) {
+    Slot temp = slotMap.get(address);
+    BombSlot bomb = new BombSlot();
+    slotMap.put(address, bomb);
+    try {
+      slot.slotValue(this);
+    } catch (XLException e) {
+      status.setStatus(e.toString());
+      setChanged();
+      notifyObservers();
+      return true;
+    }
+    slotMap.put(address, temp);
+    return false;
+  }
+
+  private boolean buildableExpr(String value) {
+    try {
+      SlotFactory.slot(value);
+    } catch (XLException e) {
+      status.setStatus(XLException.buildError().toString());
+      setChanged();
+      notifyObservers();
+      return false;
+    }
+    return true;
+  }
+}

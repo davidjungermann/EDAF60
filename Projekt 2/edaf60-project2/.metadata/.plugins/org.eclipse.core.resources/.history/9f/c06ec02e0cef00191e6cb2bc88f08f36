@@ -1,0 +1,114 @@
+package model;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Optional;
+
+import model.expr.Environment;
+import util.XLException;
+
+@SuppressWarnings("deprecation")
+public class Sheet extends Observable implements Environment {
+
+  private Map<String, Slot> slotMap;
+  private Status status;
+
+  public Sheet() {
+    slotMap = new HashMap<String, Slot>();
+    this.status = new Status();
+  }
+
+  public void add(String address, String value) {
+    Slot temp = slotMap.get(address);
+    if (buildableExpr(value)) {
+      Slot slot = SlotFactory.slot(value);
+      if (!recursiveSlot(address, slot)) {
+
+        slotMap.put(address, slot);
+
+      } else {
+        slotMap.put(address, temp);
+      }
+    }
+    setChanged();
+    notifyObservers();
+  }
+
+  private boolean buildableExpr(String value) {
+    try {
+      SlotFactory.slot(value);
+    } catch (XLException e) {
+      status.setStatus(XLException.buildError().toString());
+      setChanged();
+      notifyObservers();
+      return false;
+    }
+    return true;
+  }
+
+  public void clearAll() {
+    slotMap.clear();
+    status.clearStatus();
+    setChanged();
+    notifyObservers();
+  }
+
+  public void clearSlot(String address) {
+    slotMap.remove(address);
+    status.clearStatus();
+    setChanged();
+    notifyObservers();
+  }
+
+  private boolean emptySlot(String address) {
+    try {
+      getSlot(address);
+    } catch (NullPointerException e) {
+      return true;
+    }
+    return false;
+  }
+
+  public Optional<Slot> getSlot(String address) {
+    Slot slot = slotMap.get(address);
+    return Optional.ofNullable(slot);
+  }
+
+  public Map<String, Slot> getSlots() {
+    return slotMap;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
+  public void load(Map<String, String> map) {
+    this.clearAll();
+    for (Map.Entry<String, String> mapEntry : map.entrySet()) {
+      slotMap.put(mapEntry.getKey(), SlotFactory.slot(mapEntry.getValue()));
+    }
+    setChanged();
+    notifyObservers();
+  }
+
+  private boolean recursiveSlot(String address, Slot slot) {
+    Slot temp = slotMap.get(address);
+    BombSlot bomb = new BombSlot();
+    slotMap.put(address, bomb);
+    try {
+      slot.slotValue(this);
+    } catch (XLException e) {
+      status.setStatus(e.toString());
+      slotMap.put(address, temp);
+      return true;
+    }
+    slotMap.put(address, temp);
+    return false;
+  }
+
+  @Override
+  public double value(String address) {
+    return getSlot(address).map(x -> x.slotValue(this)).orElse(0.0);
+  }
+}

@@ -1,0 +1,31 @@
+package hardware;
+
+import java.util.List;
+
+public class Computer {
+
+  private Memory memory;
+  private Program program;
+
+  public Computer(Memory memory) {
+    this.memory = memory;
+  }
+
+  public void load(Program program) {
+    this.program = program;
+  }
+
+  public void run() {
+    ProgramCounter pc = new ProgramCounter();
+    List<Instruction> programInstructions = program.getInstructions();
+    try {
+      while (pc.get() != -1) {
+        programInstructions.get(pc.get()).execute(memory, pc);
+      }
+
+    } catch (ClassCastException e) {
+      throw new ClassCastException("Computer cannot run a program using different word types.");
+    }
+  }
+
+}

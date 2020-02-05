@@ -1,0 +1,37 @@
+package implementation;
+
+import hardware.Memory;
+import hardware.Word;
+
+public class ByteWord implements Word {
+
+  private Byte word;
+
+  public ByteWord(Byte word) {
+    this.word = word;
+  }
+
+  public void add(Word left, Word right) {
+    this.word = (byte) (((ByteWord) left).word + ((ByteWord) right).word);
+  }
+
+  public void mul(Word left, Word right) {
+    this.word = (byte) (((ByteWord) left).word * ((ByteWord) right).word);
+  }
+
+  public void set(Word word) {
+    this.word = ((ByteWord) word).word;
+  }
+
+  public String toString() {
+    return word.toString();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if ((other instanceof Word)) {
+      return word == ((ByteWord) other).word;
+    }
+    return false;
+  }
+}

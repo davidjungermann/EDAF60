@@ -1,0 +1,41 @@
+package gui;
+
+import java.awt.Color;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JTextField;
+
+import model.Sheet;
+import model.Slot;
+
+@SuppressWarnings("deprecation")
+public class Editor extends JTextField implements Observer {
+  private CurrentSlot current;
+  private Sheet sheet;
+
+  public Editor(Sheet sheet, CurrentSlot current) {
+    setBackground(Color.WHITE);
+    this.sheet = sheet;
+    this.current = current;
+    current.addObserver(this);
+
+    addActionListener(
+        e -> {
+          if (getText().length() > 0) {
+            sheet.add(current.getAddress(), getText());
+            sheet.getStatus().clearStatus();
+          }
+        });
+  }
+
+  @Override
+  public void update(Observable o, Object arg) {
+    Slot slot = sheet.getSlot(current.getAddress());
+    if (slot != null) {
+      setText(slot.toString());
+    } else {
+      setText("");
+    }
+  }
+}

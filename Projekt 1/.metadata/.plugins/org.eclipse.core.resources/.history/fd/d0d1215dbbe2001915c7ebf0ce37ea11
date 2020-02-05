@@ -1,0 +1,18 @@
+package hardware;
+
+public class Memory {
+
+  private Word[] memory;
+
+  public Memory(int size, WordFactory wordFactory) {
+    this.memory = new Word[size];
+
+    for (int i = 0; i < size; i++) {
+      memory[i] = wordFactory.word("0");
+    }
+  }
+
+  public Word getWord(int memoryIndex) {
+    return memory[memoryIndex];
+  }
+}

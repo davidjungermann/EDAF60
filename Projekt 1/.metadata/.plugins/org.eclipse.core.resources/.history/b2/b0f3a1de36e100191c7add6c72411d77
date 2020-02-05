@@ -1,0 +1,23 @@
+package implementation;
+
+import hardware.Address;
+import hardware.Word;
+
+public class Add extends BinOp {
+
+  private String string;
+
+  public Add(Address addressWord, Operand left, Operand right) {
+    super(addressWord, left, right);
+    string = left.toString() + right.toString() + addressWord.toString();
+  }
+
+  protected void op(Word addressWord, Word left, Word right) {
+    addressWord.add(left, right);
+  }
+
+  public String toString() {
+    return "Add " + string;
+  }
+  
+}

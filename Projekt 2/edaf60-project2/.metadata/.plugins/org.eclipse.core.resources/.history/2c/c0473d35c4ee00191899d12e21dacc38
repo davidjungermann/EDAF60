@@ -1,0 +1,136 @@
+package model;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Observable;
+
+import model.expr.Environment;
+import util.XLException;
+
+@SuppressWarnings("deprecation")
+public class Sheet extends Observable implements Environment {
+
+  private Map<String, Slot> slotMap;
+  private Status status;
+
+  public Sheet() {
+    slotMap = new HashMap<String, Slot>();
+    this.status = new Status();
+  }
+
+  public void add(String address, String value) {
+    Slot temp = slotMap.get(address);
+    if (buildableExpr(value)) {
+      Slot slot = SlotFactory.slot(value);
+      if (!recursiveSlot(address, slot) && !emptySlot(address)) {
+        try {
+          slotMap.put(address, slot);
+        } catch (NullPointerException e) {
+          status.setStatus(XLException.emptySlotError().toString());
+        }
+      } else {
+        slotMap.put(address, temp);
+      }
+    }
+    setChanged();
+    notifyObservers();
+  }
+
+  private boolean buildableExpr(String value) {
+    try {
+      SlotFactory.slot(value);
+    } catch (XLException e) {
+      status.setStatus(XLException.buildError().toString());
+      setChanged();
+      notifyObservers();
+      return false;
+    }
+    return true;
+  }
+
+  public void clearAll() {
+    slotMap.clear();
+    status.clearStatus();
+    setChanged();
+    notifyObservers();
+  }
+
+  public void clearSlot(String address) {
+    slotMap.remove(address);
+    status.clearStatus();
+    setChanged();
+    notifyObservers();
+  }
+
+  private boolean emptySlot(String address) {
+    try {
+      getSlot(address);
+    } catch (NullPointerException e) {
+      return true;
+    }
+    return false;
+  }
+
+  public Slot getSlot(String address) {
+    return slotMap.get(address);
+  }
+
+  public Map<String, Slot> getSlots() {
+    return slotMap;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
+  public void load(Map<String, String> map) {
+    this.clearAll();
+    for (Map.Entry<String, String> mapEntry : map.entrySet()) {
+      try {
+        slotMap.put(mapEntry.getKey(), SlotFactory.slot(mapEntry.getValue()));
+      } catch (Exception e) {
+        status.setStatus(e.getMessage());
+        setChanged();
+        notifyObservers();
+        throw new IllegalArgumentException();
+      }
+      status.clearStatus();
+    }
+    setChanged();
+    notifyObservers();
+  }
+
+  private boolean recursiveSlot(String address, Slot slot) {
+    Slot temp = slotMap.get(address);
+    BombSlot bomb = new BombSlot();
+    slotMap.put(address, bomb);
+    try {
+      slot.slotValue(this);
+    } catch (XLException e) {
+      status.setStatus(e.toString());
+      slotMap.put(address, temp);
+      return true;
+    } catch (NullPointerException e) {
+      status.setStatus(XLException.emptySlotError().toString());
+      slotMap.put(address, temp);
+      return true;
+    }
+    slotMap.put(address, temp);
+    return false;
+  }
+
+  @Override
+  public double value(String address) {
+    try {
+    return getSlot(address).slotValue(this);
+    }catch(XLException e) {
+      System.out.println(e.toString());
+      if(e.toString().equalsIgnoreCase(XLException.divByZeroError().toString())) {
+        status.setStatus(e.getMessage());
+        setChanged();
+        notifyObservers();
+      }
+      throw e;
+    }
+  }
+}

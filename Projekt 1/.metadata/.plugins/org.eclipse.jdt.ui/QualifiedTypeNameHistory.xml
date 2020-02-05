@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="hardware.Instruction"/>
+    <fullyQualifiedTypeName name="implementation.Word"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="implementation.Operand"/>
+    <fullyQualifiedTypeName name="hardware.ProgramCounter"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="implementation.WordFactory"/>
+    <fullyQualifiedTypeName name="implementation.LongWordFactory"/>
+    <fullyQualifiedTypeName name="implementation.ByteWordFactory"/>
+    <fullyQualifiedTypeName name="hardware.Program"/>
+    <fullyQualifiedTypeName name="hardware.Computer"/>
+    <fullyQualifiedTypeName name="hardware.Memory"/>
+    <fullyQualifiedTypeName name="hardware.Address"/>
+    <fullyQualifiedTypeName name="implementation.Copy"/>
+    <fullyQualifiedTypeName name="implementation.JumpEq"/>
+</qualifiedTypeNameHistroy>

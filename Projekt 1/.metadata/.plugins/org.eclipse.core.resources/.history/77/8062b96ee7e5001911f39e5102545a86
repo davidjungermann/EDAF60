@@ -1,0 +1,16 @@
+package hardware;
+
+import implementation.Operand;
+
+public interface Word extends Operand {
+
+  public void add(Word left, Word right);
+
+  public void mul(Word left, Word right);
+
+  public void set(Word word);
+
+  public Word getWord(Memory memory);
+
+  public String toString();
+}

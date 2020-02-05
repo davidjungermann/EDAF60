@@ -1,0 +1,26 @@
+package implementation;
+
+import hardware.Address;
+import hardware.Instruction;
+import hardware.Memory;
+import hardware.ProgramCounter;
+import hardware.Word;
+
+public abstract class BinOp implements Instruction {
+  private Operand left;
+  private Operand right;
+  private Address addressWord;
+
+  public BinOp(Address addressWord, Operand left, Operand right) {
+    this.left = left;
+    this.right = right;
+    this.addressWord = addressWord;
+  }
+
+  public void execute(Memory memory, ProgramCounter pc) {
+    op(addressWord.getWord(memory), left.getWord(memory), right.getWord(memory));
+  }
+
+  protected abstract void op(Word addressWord, Word left, Word right);
+  
+}

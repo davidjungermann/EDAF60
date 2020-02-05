@@ -1,0 +1,49 @@
+package gui.menu;
+
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.JFileChooser;
+
+import gui.StatusLabel;
+import gui.XL;
+import util.XLException;
+
+class LoadMenuItem extends OpenMenuItem {
+  private XLBufferedReader reader;
+  private Set<String> addresses;
+
+  public LoadMenuItem(XL xl, StatusLabel statusLabel) {
+    super(xl, statusLabel, "Load");
+    addresses = new HashSet<String>();
+  }
+
+  /* Needs error checking  */
+  @Override
+  protected Map<String, String> action(String path) throws FileNotFoundException {
+    try {
+      reader = new XLBufferedReader(path);
+      Map<String, String> tempMap = new HashMap<String, String>();
+
+      for (Map.Entry<String, String> mapEntry : tempMap.entrySet()) {
+        if(addresses.contains(mapEntry.getKey())) {
+          xl.getSheet().add(mapEntry.getKey(), mapEntry.getValue());
+        } else {
+          addresses.add(mapEntry.getKey());
+        }
+      }
+
+    } catch (XLException e) {
+      xl.getSheet().getStatus().setStatus("Error loading file.");
+      xl.getSheet().clearAll();
+    }
+  }
+
+  @Override
+  protected int openDialog(JFileChooser fileChooser) {
+    return fileChooser.showOpenDialog(xl);
+  }
+}

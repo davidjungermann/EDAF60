@@ -1,0 +1,22 @@
+package implementation;
+
+import hardware.Address;
+import hardware.Word;
+
+public class Mul extends BinOp {
+  private String string;
+
+  public Mul(Address addressWord, Operand left, Operand right) {
+    super(addressWord, left, right);
+    string = left.toString() + addressWord.toString() + right.toString();
+  }
+
+  protected void op(Word addressWord, Word left, Word right) {
+    addressWord.mul(left, right);
+  }
+
+  public String toString() {
+    return "Mul " + string;
+  }
+
+}

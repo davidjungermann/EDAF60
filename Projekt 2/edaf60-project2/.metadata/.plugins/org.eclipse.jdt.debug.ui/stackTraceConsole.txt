@@ -1,0 +1,2 @@
+"Tack! Jag laddar först alla strängar från filen till en tempmapp. Sen har jag ett sett som innehåller alla adresser som redan är tillagda(de läggs till efter hand).
+Jag loopar igenom den temporära mappen till den är tom. Varje gång den hittar en slot vars adresser redan finns lägger den till den i grid och tar bort den från tempmappen

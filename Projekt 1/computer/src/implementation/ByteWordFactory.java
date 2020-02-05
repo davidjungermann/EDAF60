@@ -1,0 +1,11 @@
+package implementation;
+
+import hardware.WordFactory;
+
+public class ByteWordFactory implements WordFactory {
+
+  @Override
+  public ByteWord word(String string) {
+    return new ByteWord(Byte.parseByte(string));
+  }
+}

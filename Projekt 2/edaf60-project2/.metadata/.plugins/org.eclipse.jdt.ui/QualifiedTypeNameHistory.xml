@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="jdk.vm.ci.hotspot.HotSpotCompiledCode.Comment"/>
+    <fullyQualifiedTypeName name="expr.ExprParser"/>
+    <fullyQualifiedTypeName name="expr.Environment"/>
+    <fullyQualifiedTypeName name="model.expr.Environment"/>
+    <fullyQualifiedTypeName name="java.util.Observer"/>
+    <fullyQualifiedTypeName name="gui.CurrentSlot"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+    <fullyQualifiedTypeName name="javax.swing.JTextField"/>
+    <fullyQualifiedTypeName name="java.awt.event.MouseAdapter"/>
+    <fullyQualifiedTypeName name="java.awt.event.MouseEvent"/>
+    <fullyQualifiedTypeName name="model.CommentSlot"/>
+    <fullyQualifiedTypeName name="java.util.Observable"/>
+    <fullyQualifiedTypeName name="util.ObservationHandler"/>
+    <fullyQualifiedTypeName name="java.awt.Color"/>
+    <fullyQualifiedTypeName name="model.Status"/>
+    <fullyQualifiedTypeName name="gui.StatusLabel"/>
+    <fullyQualifiedTypeName name="expr.Expr"/>
+    <fullyQualifiedTypeName name="model.Sheet"/>
+    <fullyQualifiedTypeName name="model.expr.Expr"/>
+    <fullyQualifiedTypeName name="model.ExprSlot"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="util.XLException"/>
+    <fullyQualifiedTypeName name="model.Slot"/>
+    <fullyQualifiedTypeName name="java.util.Set"/>
+    <fullyQualifiedTypeName name="java.util.HashSet"/>
+    <fullyQualifiedTypeName name="java.io.IOException"/>
+    <fullyQualifiedTypeName name="model.expr.ExprParser"/>
+    <fullyQualifiedTypeName name="java.util.Optional"/>
+</qualifiedTypeNameHistroy>

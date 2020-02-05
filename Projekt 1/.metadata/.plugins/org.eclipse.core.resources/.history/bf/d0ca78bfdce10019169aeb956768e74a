@@ -1,0 +1,32 @@
+package implementation;
+
+import hardware.Instruction;
+import hardware.Memory;
+import hardware.ProgramCounter;
+
+public class JumpEq implements Instruction {
+
+  private int index;
+  private Operand left;
+  private Operand right;
+
+  public JumpEq(int index, Operand left, Operand right) {
+    this.index = index;
+    this.left = left;
+    this.right = right;
+  }
+
+  @Override
+  public void execute(Memory memory, ProgramCounter programCounter) {
+    if (left.getWord(memory).equals(right.getWord(memory))) {
+      programCounter.set(index);
+    } else {
+      programCounter.increment(); 
+    }
+  }
+
+  public String toString() {
+    return "Jump to " + index + " if " + left + " == " + right;
+  }
+  
+}

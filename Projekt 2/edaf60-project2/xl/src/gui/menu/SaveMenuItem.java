@@ -1,0 +1,31 @@
+package gui.menu;
+
+import java.io.FileNotFoundException;
+import java.util.Map;
+
+import javax.swing.JFileChooser;
+
+import gui.StatusLabel;
+import gui.XL;
+import model.Slot;
+
+class SaveMenuItem extends OpenMenuItem {
+  private XLPrintStream writer;
+
+  public SaveMenuItem(XL xl, StatusLabel statusLabel) {
+    super(xl, statusLabel, "Save");
+  }
+
+  /* Needs error checking  */
+  @Override
+  protected void action(String path) throws FileNotFoundException {
+    Map<String, Slot> map = xl.getSheet().getSlots();
+    writer = new XLPrintStream(path);
+    writer.save(map.entrySet());
+  }
+
+  @Override
+  protected int openDialog(JFileChooser fileChooser) {
+    return fileChooser.showSaveDialog(xl);
+  }
+}
